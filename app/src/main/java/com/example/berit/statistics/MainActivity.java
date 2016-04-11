@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -88,40 +87,30 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.refresh) {
-                displayListView();
-                return true;
-        }
-        if (id == R.id.clear) {
-            AlertDialog alert = alertDialog();
-            alert.show();
-            return true;
+            displayListView();
+        } else if (id == R.id.clear) {
+            clearDialog().show();
         }
         return super.onOptionsItemSelected(item);
     }
 
     //http://stackoverflow.com/questions/2115758/how-do-i-display-an-alert-dialog-on-android
-    private AlertDialog alertDialog(){
+    public AlertDialog clearDialog(){
         AlertDialog alert = new AlertDialog.Builder(this)
-                // Dialog message
-                .setMessage("Are you sure you want to clear?")
-                        // Positive button
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+//                .setIcon(android.R.drawable.ic_dialog_alert)
                 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        // Delete database
                         uow.DropCreateDatabase();
-                        // Draw list
+                        uow.SeedData();
                         displayListView();
-                        // Debug
-                        Log.d("MainActivity", "Creating new database");
-                        // Close dialog
                         dialog.dismiss();
                     }
                 })
-                        // Negative button
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //Debug
-                        Log.d("MainActivity", "New database creation cancelled");
                         // Close dialog
                         dialog.dismiss();
                     }
