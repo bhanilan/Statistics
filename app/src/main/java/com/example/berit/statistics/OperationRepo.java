@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OperationRepo extends Repo<Operation> {
 
     public OperationRepo(SQLiteDatabase database, String tablename, String[] allColumns) {
@@ -31,5 +34,23 @@ public class OperationRepo extends Repo<Operation> {
         operation.setRes(cursor.getDouble(4));
         operation.setTimeStamp(cursor.getInt(5));
         return operation;
+    }
+
+    public List<Operation> getOperations(long id){
+        List<Operation> listOfEntity = new ArrayList<Operation>();
+
+        Cursor cursor = getDatabase().query(getTablename(),
+                getAllColumns(), "_id = " + id, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Operation entity = cursorToEntity(cursor);
+            listOfEntity.add(entity);
+            cursor.moveToNext();
+        }
+        // make sure to close the cursor
+        cursor.close();
+
+        return listOfEntity;
     }
 }

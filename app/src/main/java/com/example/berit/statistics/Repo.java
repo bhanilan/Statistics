@@ -37,10 +37,8 @@ public abstract class Repo<T extends IEntity> {
     public List<T> getAll(){
         List<T> listOfEntity = new ArrayList<T>();
 
-        Cursor cursor = database.query(tablename,
-                allColumns, null, null, null, null, null);
+        Cursor cursor = getCursorAll();
 
-        cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             T entity = cursorToEntity(cursor);
             listOfEntity.add(entity);
@@ -93,4 +91,6 @@ public abstract class Repo<T extends IEntity> {
 
     // this has to be implemented in child class
     public abstract T cursorToEntity(Cursor cursor);
+
+
 }
